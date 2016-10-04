@@ -7,10 +7,13 @@
 #include <set>
 #include <tuple>
 
-#define SMALL_DATA "small_time_series.txt"
-#define BIG_DATA "time_series.txt"
+#define SMALL_DATA "data/small_time_series.txt"
+#define BIG_DATA "data/time_series.txt"
 
 using namespace std;
+
+//Alias for main data structure
+using d_structure =  map<string,set<pair<int,int>>>;
 
 /*Read all dates from dataset and return max/min date
  * *
@@ -59,9 +62,9 @@ tuple<int,string,int> parseLine(string line){
  * dataset: name of dataset file
  * *
  */
-int populateDataStructure(string dataset){
+d_structure populateDataStructure(string dataset){
 	ifstream infile(dataset);
-	map<string,set<pair<int,int>>> s;
+	d_structure s;
 	set<int> all_dates;
 	for( std::string line; getline( infile, line ); ){
 		int date,count;
@@ -78,14 +81,16 @@ int populateDataStructure(string dataset){
 		else 
 			s[page].insert(make_pair(date,count));
 	}
-	//for(auto const &elem : s){
-		//cout << elem.first << endl;
-		//for(auto const p : elem.second){
-			//cout << "\t" << p.first << " " << p.second << endl;
-		//}
-	//}
+	
+	return s;
 }
 
 int main(){
-	populateDataStructure(SMALL_DATA);
+	d_structure s= populateDataStructure(SMALL_DATA);
+	for(auto const &elem : s){
+		cout << elem.first << endl;
+		for(auto const p : elem.second){
+			cout << "\t" << p.first << " " << p.second << endl;
+		}
+	}
 }
