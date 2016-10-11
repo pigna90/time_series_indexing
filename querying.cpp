@@ -1,25 +1,5 @@
 #include "header.hpp"
 
-/* Return a vector with all the counters of page in the time interval [time1, time2]
- * *
- * s: structure previously populated
- * page: string of the selected webpage
- * time1: start of the selected range
- * time2: finish of the selected range
- * *
- */
-//vector<int> range(d_structure s, string page, int time1, int time2) {
-    //vector<int> result;
-
-    //for(auto const e : s[page]) {
-        //if (e.first >= time1 && e.first <= time2) {
-                //result.emplace_back(e.second);
-        //}
-    //}
-
-    //return result;
-//}
-
 /* Return a vector with all the counters of page in the time interval [time1, time2] in tuple version
  * *
  * s: structure previously populated
@@ -40,18 +20,6 @@ vector<int> range_tuple(d_structure s, string page, int time1, int time2) {
     return result;
 }
 
-/* Comparing class in order to obtain Max Heap
- * *
- * operator(): using second-value ordering for object of type std::pair<int,int>
- * *
- */
-//class Compare {
-    //public:
-        //bool operator() (const pair<int, int>& p1, const pair<int, int>& p2) {
-            //return p1.second < p2.second;
-        //}
-//};
-
 /* Comparing class in order to obtain Max Heap in tuple version
  * *
  * operator(): using second-value ordering for object of type std::pair<int,int>
@@ -63,32 +31,6 @@ public:
         return get<1>(p1) < get<1>(p2);
     }
 };
-
-/* Return a heap structure with all the top K counters of page in the time interval [time1, time2]
- * *
- * s: structure previously populated
- * page: string of the selected webpage
- * time1: start of the selected range
- * time2: finish of the selected range
- * k: number of counters required
- * *
- */
-//vector<pair<int,int>> top_k_range(d_structure s, string page, int time1, int time2, int k) {
-    //priority_queue<pair<int,int>, vector<pair<int,int>>, Compare> top_k(s[page].begin(), s[page].end());
-
-    //vector<pair<int,int>> result(k);
-
-    //for(int i = 0; i < k; ++i) {
-        //if(top_k.top().first >= time1 && top_k.top().first <= time2) {
-            //result[i] = top_k.top();
-        //} else {
-            //--i;
-        //}
-        //top_k.pop();
-    //}
-
-    //return result;
-//}
 
 /* Return a heap structure with all the top K counters of page in the time interval [time1, time2] in tuple version
 * *
