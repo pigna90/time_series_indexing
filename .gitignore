@@ -1,2 +1,3 @@
+*.gch
 source_bin/*
 data/*
