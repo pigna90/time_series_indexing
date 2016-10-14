@@ -47,8 +47,6 @@ pair<int, int> getMaxMinDate(string dataset){
 	for(string line; getline(infile, line);){
 		string token = line.substr(0, line.find("\t"));
 		string token_1 = token.substr(0, line.find("-")) + token.substr(line.find("-")+1, token.length()-1);
-		if(atoi(token_1.c_str()) == 0)
-			cout << line << endl;
 		v.push_back(atoi(token_1.c_str()));
 	}
 	int maxDate = *max_element(v.begin(), v.end());
