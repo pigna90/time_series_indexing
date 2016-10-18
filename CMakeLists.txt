@@ -6,8 +6,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin/")
 
 # Serialization test main
 set(SOURCES src/serialize.cpp src/test_serialize.cpp)
-add_executable(outCmake ${SOURCES})
-target_compile_features(outCmake PRIVATE cxx_range_for)
+add_executable(test_serialize ${SOURCES})
+target_compile_features(test_serialize PRIVATE cxx_range_for)
 
 # Querying test main
 set(SOURCES src/querying.cpp src/test_querying.cpp src/serialize.cpp)
