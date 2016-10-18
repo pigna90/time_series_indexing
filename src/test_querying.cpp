@@ -1,7 +1,7 @@
 #include "../include/header.hpp"
  
 int main(int argc, char* argv[]){
-	if(argc == 1){
+	if(argc == 2){
 		string in_data_bin = argv[1];
 		d_structure s = load_data(in_data_bin);
 
