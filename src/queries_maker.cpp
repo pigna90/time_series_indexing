@@ -7,9 +7,6 @@
 #include <cstdlib>
 #include <algorithm>
 
-#define SMALL_DATA "data/small_time_series.txt"
-#define BIG_DATA "data/time_series.txt"
-
 using namespace std;
 
 //Alias for main data structure
@@ -122,11 +119,11 @@ int main(int argc, char* argv[]){
 		int n = stoi(argv[1]);
 		int k_min = stoi(argv[2]);
 		int k_max = stoi(argv[3]);
-		string type_dataset = (*argv[4] == 's' ? SMALL_DATA : BIG_DATA);
+		string in_dataset = argv[4];
 		string out_file = argv[5];
 				
 		srand((unsigned)time(0));
-		serializeQueries(n,k_min,k_max,type_dataset,out_file);
+		serializeQueries(n,k_min,k_max,in_dataset,out_file);
 	}
 	else
 		cout << "Missing parameters" << endl << "Exit." << endl;
