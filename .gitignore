@@ -1,4 +1,8 @@
 *.gch
-source_bin/*
+bin/*
 data/*
 !test.txt
+CMakeCache.txt
+CMakeFiles/*
+cmake_install.cmake
+Makefile
