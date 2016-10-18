@@ -4,6 +4,8 @@ This is a project made for educational purpose for the course of [Laboratory on 
 
 ### Libraries
 * [Cereal] - serialization library
+
+### Tech
 * [CMake] - family of tools designed to build, test and package software
 
 ### Usage
