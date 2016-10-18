@@ -28,7 +28,7 @@ $ queries_maker numberOfQueries K_min K_max path/to/dataset out_queries
 ```
 Where **K_min** and **K_max** reppresent the range of K values, and **out_queries** the result file.
 
-### Autors
+### Authors
 Alessandro Romano  
 Paolo Grossi
 
