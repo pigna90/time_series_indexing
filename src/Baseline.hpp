@@ -1,8 +1,21 @@
+#pragma once
+
 #include <cstdint>
+#include <vector>
+#include <map>
+#include <string>
+#include <pair>
+#include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/archives/binary.hpp>
 
 class Baseline() {
 private:
 	std::map<std::string, std::vector<uint32_t>> m_time_series;
+	std::set<uint16_t> m_dates;
+
 	template <class Archive>
 	void TimeSeries::serialize(Archive &archive) {
 		archive(m_time_series);
