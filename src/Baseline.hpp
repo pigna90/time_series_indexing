@@ -2,14 +2,15 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <vector>
+#include <utility>
 #include <map>
+#include <queue>
 #include <string>
-/*#include <cereal/types/string.hpp>
-#include <cereal/types/vector.hpp>
+#include <vector>
+/*#include <cereal/archives/binary.hpp>
 #include <cereal/types/map.hpp>
-#include <cereal/types/map.hpp>
-#include <cereal/archives/binary.hpp>*/
+#include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>*/
 
 class Baseline {
 private:
@@ -44,7 +45,7 @@ public:
 		input(m_time_series);
 	}*/
 
-	inline std::vector<uint32_t> range(
+	/*inline std::vector<uint32_t> range(
 		const std::string &page, uint32_t time1, uint32_t time2) const {
 		
 		const auto lt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time1);
@@ -57,9 +58,9 @@ public:
 			result.push_back(pg[idx]);
 			
 		return result;
-	}
+	}*/
 
-	/*inline std::vector<std::pair<uint16_t, uint32_t>> rangeTopK(
+	inline std::vector<std::pair<uint16_t, uint32_t>> rangeTopK(
 		const std::string &page, uint32_t time1, uint32_t time2, uint32_t k) const {
 			
 		const auto lt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time1);
@@ -70,9 +71,9 @@ public:
 		
 		for(auto idx = lt_idx - m_dates.begin(); idx <= rt_idx - m_dates.begin(); ++idx) {
 			if(heap.size() < k)
-				heap.push(make_pair(m_dates[idx], pg[idx]));
-			else if(heap.top() < pg[idx]) {
-				heap.push(make_pair(m_dates[idx], pg[idx]));
+				heap.push(std::make_pair(m_dates[idx], pg[idx]));
+			else if(heap.top().second < pg[idx]) {
+				heap.push(std::make_pair(m_dates[idx], pg[idx]));
 				heap.pop();
 			}
 		}
@@ -86,7 +87,7 @@ public:
 		}
 		
 		return result;
-	}*/
+	}
 
 	uint32_t size() const {
 		/*Possibile realizzazione: inserire la mappa all'interno di
