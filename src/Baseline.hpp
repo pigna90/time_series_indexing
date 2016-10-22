@@ -5,21 +5,21 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <cereal/types/string.hpp>
+/*#include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/map.hpp>
-#include <cereal/archives/binary.hpp>
+#include <cereal/archives/binary.hpp>*/
 
 class Baseline {
 private:
 	std::map<std::string, std::vector<uint32_t>> m_time_series;
 	std::vector<uint16_t> m_dates;
 
-	template <class Archive>
+	/*template <class Archive>
 	void TimeSeries::serialize(Archive &archive) {
 		archive(m_time_series);
-	}
+	}*/
 	
 public:
 	Baseline() {}
@@ -32,7 +32,7 @@ public:
 		  * parseLine, chiamata da populateDataStructure*/
 	}
 
-	void serialize_data(const string &file_name) const {
+	/*void serialize_data(const string &file_name) const {
 		std::ofstream os(file_name, std::ios::binary);                    
 		cereal::BinaryOutputArchive output(os);
 		output(m_time_series);
@@ -42,28 +42,26 @@ public:
 		std::ifstream is(file_name, std::ios::binary);
 		cereal::BinaryInputArchive input(is);
 		input(m_time_series);
-	}
+	}*/
 
 	inline std::vector<uint32_t> range(
 		const std::string &page, uint32_t time1, uint32_t time2) const {
 		
 		const auto lt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time1);
-		const auto rt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time2);		
+		const auto rt_idx = std::lower_bound(lt_idx, m_dates.end(), time2);		
 		
 		std::vector<uint32_t> result(rt_idx - lt_idx);
 		
-		const auto page = m_time_series.find(page);
-		
 		for(auto idx = lt_idx - m_dates.begin(); idx <= rt_idx - m_dates.begin(); ++idx)
-			result.push_back(page->second[idx]);
+			result.push_back(m_time_series.at(page)[idx]);
 			
 		return result;
 	}
 
-	inline std::vector<std::pair<uint16_t, uint32_t>> rangeTopK(
+	/*inline std::vector<std::pair<uint16_t, uint32_t>> rangeTopK(
 		const std::string &page, uint32_t time1, uint32_t time2, uint32_t k) const {
 		
-	}
+	}*/
 
 	uint32_t size() const {
 		/*Possibile realizzazione: inserire la mappa all'interno di
