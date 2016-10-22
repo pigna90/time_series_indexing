@@ -16,7 +16,7 @@
 class Baseline {
 private:
 	std::map<std::string, std::vector<uint32_t>> m_time_series;
-	std::vector<uint16_t> m_dates;
+	std::vector<uint32_t> m_dates;
 
 	template <class Archive>
 	void serialize(Archive &archive) {
@@ -28,11 +28,6 @@ public:
 	~Baseline() {}
 
 	Baseline(const std::string &dataset_name) {
-		/*Il costruttore con un parametro assume le caratteristiche
-		 * della funzione populateDataStructure precedentemente
-		 * implementata, di conseguenza andrà rimossa dalla classe.*/
-		 /*Valutare se inserire in questo posto anche la funzione
-		  * parseLine, chiamata da populateDataStructure*/
 		std::set<std::string> lines;
 		std::ifstream infile(dataset_name);
 		std::string token;
@@ -41,10 +36,11 @@ public:
 			lines.insert(line);
 			token = line.substr(0, line.find("\t"));
 			uint32_t date = atoi((token.substr(0, line.find("-")) + token.substr(line.find("-")+1, token.length()-1)).c_str());
-			m_dates.insert(date);
+			if(std::find(m_dates.begin(), m_dates.end(), date) == m_dates.end())
+				m_dates.push_back(date);
 		}
 		infile.close();
-
+		
 		for(auto line: lines){
 			uint32_t date, count;
 			std::string page, token;
@@ -57,14 +53,13 @@ public:
 			page = token.substr(0, token.find("\t"));
 			//Parse page counter
 			count = atoi((token.substr(token.find("\t")+1, token.length())).c_str());
-			//std::cout << page << " " << date << " " << count << std::endl;
+			
 			if (m_time_series.find(page) == m_time_series.end()) {
 				std::vector<uint32_t> visits(m_dates.size(),0);
 				m_time_series.insert(make_pair(page,visits));
 			}
-			size_t dateIndex = std::distance(m_dates.begin(),m_dates.find(date));
-			std::cout << dateIndex << std::endl;
-			(m_time_series[page])[dateIndex] = count;
+			size_t date_idx = std::find(m_dates.begin(),m_dates.end(),date) - m_dates.begin();
+			(m_time_series[page])[date_idx] = count;
 		}
 	}
 
@@ -131,11 +126,21 @@ public:
 		return result;
 	}
 	
-	size_t size() const {
-		std::vector<std::vector<uint32_t>> data;
-		std::copy(m_time_series.begin(), m_time_series.end(), data.begin());
+	//size_t size() const {
+		//std::vector<std::vector<uint32_t>> data;
+		//std::copy(m_time_series.begin(), m_time_series.end(), data.begin());
 		
-		size_t result = sizeof(std::vector<uint32_t>) * data.size();  
-		return result;
+		//size_t result = sizeof(std::vector<uint32_t>) * data.size();  
+		//return result;
+	//}
+
+	void print(void) const {
+		for(auto const &elem : m_time_series){
+			std::cout << elem.first << std::endl;
+			for(auto const visit : elem.second){
+				size_t date_idx = std::find((elem.second).begin(),(elem.second).end(),visit) - (elem.second).begin();
+				std::cout << "\t" << m_dates[date_idx] << " " << visit << std::endl;
+			}
+		}
 	}
 };
