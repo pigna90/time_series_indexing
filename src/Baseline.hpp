@@ -45,7 +45,7 @@ public:
 		input(m_time_series);
 	}*/
 
-	/*inline std::vector<uint32_t> range(
+	inline std::vector<uint32_t> range(
 		const std::string &page, uint32_t time1, uint32_t time2) const {
 		
 		const auto lt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time1);
@@ -54,11 +54,14 @@ public:
 		
 		std::vector<uint32_t> result(rt_idx - lt_idx);
 		
-		for(auto idx = lt_idx - m_dates.begin(); idx <= rt_idx - m_dates.begin(); ++idx)
+		const auto lt_end = lt_idx - m_dates.begin();
+		const auto rt_end = rt_idx - m_dates.begin();
+		
+		for(size_t idx = lt_end; idx <= rt_end; ++idx)
 			result.push_back(pg[idx]);
 			
 		return result;
-	}*/
+	}
 
 	inline std::vector<std::pair<uint16_t, uint32_t>> rangeTopK(
 		const std::string &page, uint32_t time1, uint32_t time2, uint32_t k) const {
@@ -69,7 +72,10 @@ public:
 		
 		std::priority_queue<std::pair<uint16_t, uint32_t>> heap;
 		
-		for(auto idx = lt_idx - m_dates.begin(); idx <= rt_idx - m_dates.begin(); ++idx) {
+		const auto lt_end = lt_idx - m_dates.begin();
+		const auto rt_end = rt_idx - m_dates.begin();
+		
+		for(size_t idx = lt_end; idx <= rt_end; ++idx) {
 			if(heap.size() < k)
 				heap.push(std::make_pair(m_dates[idx], pg[idx]));
 			else if(heap.top().second < pg[idx]) {
@@ -79,9 +85,9 @@ public:
 		}
 		
 		std::vector<std::pair<uint16_t, uint32_t>> result;
-		result.reserve(k);
+		result.reserve(heap.size());
 		
-		for(auto idx = 0; idx < heap.size(); ++idx) {
+		for(size_t idx = 0; idx < heap.size(); ++idx) {
 			result.push_back(heap.top());
 			heap.pop();
 		}
