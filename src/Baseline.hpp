@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <utility>
 #include <map>
 #include <queue>
 #include <string>
@@ -77,9 +76,9 @@ public:
 		
 		for(size_t idx = lt_end; idx <= rt_end; ++idx) {
 			if(heap.size() < k)
-				heap.push(std::make_pair(m_dates[idx], pg[idx]));
+				heap.emplace(m_dates[idx], pg[idx]);
 			else if(heap.top().second < pg[idx]) {
-				heap.push(std::make_pair(m_dates[idx], pg[idx]));
+				heap.emplace(m_dates[idx], pg[idx]);
 				heap.pop();
 			}
 		}
