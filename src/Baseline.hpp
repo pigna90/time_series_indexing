@@ -44,7 +44,7 @@ public:
 		input(m_time_series);
 	}*/
 
-	inline std::vector<uint32_t> range(
+	/*inline std::vector<uint32_t> range(
 		const std::string &page, uint32_t time1, uint32_t time2) const {
 		
 		const auto lt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time1);
@@ -92,14 +92,13 @@ public:
 		}
 		
 		return result;
-	}
-
-	uint32_t size() const {
-		/*Possibile realizzazione: inserire la mappa all'interno di
-		 * un std::vector<tipodellamappa> e successivamente calcolare la dimensione
-		 * occupata come:
-		 * size_t result = sizeof(tipodellamappa) * vettore.size()*/
-		  
-		return 0;
+	}*/
+	
+	size_t size() const {
+		std::vector<std::vector<uint32_t>> data;
+		std::copy(m_time_series.begin(), m_time_series.end(), data.begin());
+		
+		size_t result = sizeof(std::vector<uint32_t>) * data.size();  
+		return result;
 	}
 };
