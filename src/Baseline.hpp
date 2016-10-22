@@ -1,20 +1,20 @@
 #pragma once
 
+#include <algorithm>
 #include <cstdint>
 #include <vector>
 #include <map>
 #include <string>
-#include <pair>
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/archives/binary.hpp>
 
-class Baseline() {
+class Baseline {
 private:
 	std::map<std::string, std::vector<uint32_t>> m_time_series;
-	std::set<uint16_t> m_dates;
+	std::vector<uint16_t> m_dates;
 
 	template <class Archive>
 	void TimeSeries::serialize(Archive &archive) {
@@ -22,9 +22,9 @@ private:
 	}
 	
 public:
-	BaseLine() {}
-	~BaseLine() {}
-	BaseLine(const std::string &dataset_name) {
+	Baseline() {}
+	~Baseline() {}
+	Baseline(const std::string &dataset_name) {
 		/*Il costruttore con un parametro assume le caratteristiche
 		 * della funzione populateDataStructure precedentemente
 		 * implementata, di conseguenza andrà rimossa dalla classe.*/
@@ -34,7 +34,7 @@ public:
 
 	void serialize_data(const string &file_name) const {
 		std::ofstream os(file_name, std::ios::binary);                    
-		cereal::BinaryOutputArchive output(os); // stream to cout
+		cereal::BinaryOutputArchive output(os);
 		output(m_time_series);
 	}
 		
@@ -45,18 +45,23 @@ public:
 	}
 
 	inline std::vector<uint32_t> range(
-										const std::string &page,
-										uint32_t time1,
-										uint32_t time2) const {
+		const std::string &page, uint32_t time1, uint32_t time2) const {
 		
+		const auto lt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time1);
+		const auto rt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time2);		
 		
+		std::vector<uint32_t> result(rt_idx - lt_idx);
+		
+		const auto page = m_time_series.find(page);
+		
+		for(auto idx = lt_idx - m_dates.begin(); idx <= rt_idx - m_dates.begin(); ++idx)
+			result.push_back(page->second[idx]);
+			
+		return result;
 	}
 
-	inline std::vector<std::pair<uint32_t, uint32_t> rangeTopK(
-										const std::string &page,
-										uint32_t time1,
-										uint32_t time2,
-										uint32_t k) const {
+	inline std::vector<std::pair<uint16_t, uint32_t>> rangeTopK(
+		const std::string &page, uint32_t time1, uint32_t time2, uint32_t k) const {
 		
 	}
 
@@ -65,5 +70,7 @@ public:
 		 * un std::vector<tipodellamappa> e successivamente calcolare la dimensione
 		 * occupata come:
 		 * size_t result = sizeof(tipodellamappa) * vettore.size()*/
+		  
+		return 0;
 	}
-}
+};
