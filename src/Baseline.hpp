@@ -2,32 +2,32 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <fstream>
 #include <map>
 #include <queue>
-#include <string>
 #include <set>
-#include <fstream>
+#include <string>
 #include <vector>
-#include <cereal/archives/binary.hpp>
+/*#include <cereal/archives/binary.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/string.hpp>
-#include <cereal/types/vector.hpp>
+#include <cereal/types/vector.hpp>*/
 
 class Baseline {
 private:
 	std::map<std::string, std::vector<uint32_t>> m_time_series;
 	std::vector<uint32_t> m_dates;
 
-	template <class Archive>
+	/*template <class Archive>
 	void serialize(Archive &archive) {
 		archive(m_time_series);
-	}
+	}*/
 
 public:
 	Baseline() {}
 	~Baseline() {}
 
-	Baseline(const std::string &dataset_name) {
+	/*Baseline(const std::string &dataset_name) {
 		std::set<std::string> lines;
 		std::ifstream infile(dataset_name);
 		std::string token;
@@ -61,9 +61,9 @@ public:
 			size_t date_idx = std::find(m_dates.begin(),m_dates.end(),date) - m_dates.begin();
 			(m_time_series[page])[date_idx] = count;
 		}
-	}
+	}*/
 
-	void serialize_data(const std::string &file_name) const {
+	/*void serialize_data(const std::string &file_name) const {
 		std::ofstream os(file_name, std::ios::binary);                    
 		cereal::BinaryOutputArchive output(os);
 		output(m_time_series);
@@ -73,9 +73,9 @@ public:
 		std::ifstream is(file_name, std::ios::binary);
 		cereal::BinaryInputArchive input(is);
 		input(m_time_series);
-	}
+	}*/
 
-	inline std::vector<uint32_t> range(
+	/*inline std::vector<uint32_t> range(
 		const std::string &page, uint32_t time1, uint32_t time2) const {
 		
 		const auto lt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time1);
@@ -124,17 +124,17 @@ public:
 		}
 		
 		return result;
-	}
+	}*/
 	
-	//size_t size() const {
-		//std::vector<std::vector<uint32_t>> data;
-		//std::copy(m_time_series.begin(), m_time_series.end(), data.begin());
+	size_t size() const {
+		std::vector<std::pair<std::string, std::vector<uint32_t>>> data;
+		std::copy(m_time_series.begin(), m_time_series.end(), data.begin());
 		
-		//size_t result = sizeof(std::vector<uint32_t>) * data.size();  
-		//return result;
-	//}
+		size_t result = sizeof(std::pair<std::string, std::vector<uint32_t>>) * data.size();  
+		return result;
+	}
 
-	void print(void) const {
+	/*void print(void) const {
 		for(auto const &elem : m_time_series){
 			std::cout << elem.first << std::endl;
 			for(auto const visit : elem.second){
@@ -142,5 +142,5 @@ public:
 				std::cout << "\t" << m_dates[date_idx] << " " << visit << std::endl;
 			}
 		}
-	}
+	}*/
 };
