@@ -27,7 +27,7 @@ public:
 	Baseline() {}
 	~Baseline() {}
 
-	/*Baseline(const std::string &dataset_name) {
+	Baseline(const std::string &dataset_name) {
 		std::set<std::string> lines;
 		std::ifstream infile(dataset_name);
 		std::string token;
@@ -61,7 +61,7 @@ public:
 			size_t date_idx = std::find(m_dates.begin(),m_dates.end(),date) - m_dates.begin();
 			(m_time_series[page])[date_idx] = count;
 		}
-	}*/
+	}
 
 	/*void serialize_data(const std::string &file_name) const {
 		std::ofstream os(file_name, std::ios::binary);                    
@@ -75,7 +75,7 @@ public:
 		input(m_time_series);
 	}*/
 
-	/*inline std::vector<uint32_t> range(
+	inline std::vector<uint32_t> range(
 		const std::string &page, uint32_t time1, uint32_t time2) const {
 		
 		const auto lt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time1);
@@ -124,7 +124,7 @@ public:
 		}
 		
 		return result;
-	}*/
+	}
 	
 	size_t size() const {
 		std::vector<std::pair<std::string, std::vector<uint32_t>>> data;
