@@ -9,20 +9,20 @@
 #include <set>
 #include <string>
 #include <vector>
-/*#include <cereal/archives/binary.hpp>
+#include <cereal/archives/binary.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/string.hpp>
-#include <cereal/types/vector.hpp>*/
+#include <cereal/types/vector.hpp>
 
 class Baseline {
 private:
 	std::map<std::string, std::vector<uint32_t>> m_time_series;
 	std::vector<uint32_t> m_dates;
 
-	/*template <class Archive>
+	template <class Archive>
 	void serialize(Archive &archive) {
 		archive(m_time_series);
-	}*/
+	}
 
 public:
 	Baseline() {}
@@ -64,7 +64,7 @@ public:
 		}
 	}
 
-	/*void serialize_data(const std::string &file_name) const {
+	void serialize_data(const std::string &file_name) const {
 		std::ofstream os(file_name, std::ios::binary);                    
 		cereal::BinaryOutputArchive output(os);
 		output(m_time_series);
@@ -74,7 +74,7 @@ public:
 		std::ifstream is(file_name, std::ios::binary);
 		cereal::BinaryInputArchive input(is);
 		input(m_time_series);
-	}*/
+	}
 
 	inline std::vector<uint32_t> range(
 		const std::string &page, uint32_t time1, uint32_t time2) const {
@@ -95,7 +95,7 @@ public:
 		return result;
 	}
 
-	inline std::vector<std::pair<uint16_t, uint32_t>> rangeTopK(
+	inline std::vector<std::pair<uint32_t, uint32_t>> rangeTopK(
 		const std::string &page, uint32_t time1, uint32_t time2, uint32_t k) const {
 			
 		const auto lt_idx = std::lower_bound(m_dates.begin(), m_dates.end(), time1);
@@ -105,7 +105,7 @@ public:
 		const auto lt_end = lt_idx - m_dates.begin();
 		const auto rt_end = rt_idx - m_dates.begin();
 		
-		std::priority_queue<std::pair<uint16_t, uint32_t>> heap;
+		std::priority_queue<std::pair<uint32_t, uint32_t>> heap;
 		
 		for(size_t idx = lt_end; idx <= rt_end; ++idx) {
 			if(heap.size() < k)
@@ -116,7 +116,7 @@ public:
 			}
 		}
 		
-		std::vector<std::pair<uint16_t, uint32_t>> result;
+		std::vector<std::pair<uint32_t, uint32_t>> result;
 		result.reserve(heap.size());
 		
 		for(size_t idx = 0; idx < heap.size(); ++idx) {
@@ -138,7 +138,7 @@ public:
 		return result;
 	}
 
-	/*void print(void) const {
+	void print(void) const {
 		for(auto const &elem : m_time_series) {
 			std::cout << elem.first << std::endl;
 			for(auto const visit : elem.second) {
@@ -146,5 +146,5 @@ public:
 				std::cout << "\t" << m_dates[date_idx] << " " << visit << std::endl;
 			}
 		}
-	}*/
+	}
 };
