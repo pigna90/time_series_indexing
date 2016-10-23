@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <fstream>
+#include <iostream>
 #include <map>
 #include <queue>
 #include <set>
@@ -127,17 +128,20 @@ public:
 	}
 	
 	size_t size() const {
-		std::vector<std::pair<std::string, std::vector<uint32_t>>> data;
-		std::copy(m_time_series.begin(), m_time_series.end(), data.begin());
+		std::vector<std::pair<std::string, std::vector<uint32_t>>> values;
 		
-		size_t result = sizeof(std::pair<std::string, std::vector<uint32_t>>) * data.size();  
+		for(auto idx = m_time_series.begin(); idx != m_time_series.end(); ++idx) {
+			values.emplace_back(idx->first, idx->second);
+		}
+		
+		size_t result = sizeof(std::string) * sizeof(std::vector<uint32_t>) * values.size();  
 		return result;
 	}
 
 	/*void print(void) const {
-		for(auto const &elem : m_time_series){
+		for(auto const &elem : m_time_series) {
 			std::cout << elem.first << std::endl;
-			for(auto const visit : elem.second){
+			for(auto const visit : elem.second) {
 				size_t date_idx = std::find((elem.second).begin(),(elem.second).end(),visit) - (elem.second).begin();
 				std::cout << "\t" << m_dates[date_idx] << " " << visit << std::endl;
 			}
