@@ -21,7 +21,7 @@ private:
 
 	template <class Archive>
 	void serialize(Archive &archive) {
-		archive(m_time_series);
+		archive(m_time_series,m_dates);
 	}
 
 public:
@@ -67,13 +67,13 @@ public:
 	void serialize_data(const std::string &file_name) const {
 		std::ofstream os(file_name, std::ios::binary);                    
 		cereal::BinaryOutputArchive output(os);
-		output(m_time_series);
+		output(m_time_series,m_dates);
 	}
 		
 	void load_data(const std::string &file_name) {
 		std::ifstream is(file_name, std::ios::binary);
 		cereal::BinaryInputArchive input(is);
-		input(m_time_series);
+		input(m_time_series,m_dates);
 	}
 
 	inline std::vector<uint32_t> range(
