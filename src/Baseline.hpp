@@ -9,20 +9,20 @@
 #include <set>
 #include <string>
 #include <vector>
-#include <cereal/archives/binary.hpp>
+/*#include <cereal/archives/binary.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/string.hpp>
-#include <cereal/types/vector.hpp>
+#include <cereal/types/vector.hpp>*/
 
 class Baseline {
 private:
 	std::map<std::string, std::vector<uint32_t>> m_time_series;
 	std::vector<uint32_t> m_dates;
 
-	template <class Archive>
+	/*template <class Archive>
 	void serialize(Archive &archive) {
 		archive(m_time_series,m_dates);
-	}
+	}*/
 
 public:
 	Baseline() {}
@@ -40,6 +40,7 @@ public:
 			if(std::find(m_dates.begin(), m_dates.end(), date) == m_dates.end())
 				m_dates.push_back(date);
 		}
+		std::sort(m_dates.begin(), m_dates.end());
 		infile.close();
 		
 		for(auto line: lines){
@@ -64,7 +65,7 @@ public:
 		}
 	}
 
-	void serialize_data(const std::string &file_name) const {
+	/*void serialize_data(const std::string &file_name) const {
 		std::ofstream os(file_name, std::ios::binary);                    
 		cereal::BinaryOutputArchive output(os);
 		output(m_time_series,m_dates);
@@ -74,7 +75,7 @@ public:
 		std::ifstream is(file_name, std::ios::binary);
 		cereal::BinaryInputArchive input(is);
 		input(m_time_series,m_dates);
-	}
+	}*/
 
 	inline std::vector<uint32_t> range(
 		const std::string &page, uint32_t time1, uint32_t time2) const {
