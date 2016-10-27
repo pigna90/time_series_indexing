@@ -132,9 +132,11 @@ public:
 		
 		std::vector<std::pair<uint32_t, uint32_t>> result;
 		
-		result.reserve(heap.size());
+		uint32_t size = heap.size();
 		
-		for(size_t idx = 0; idx < heap.size(); ++idx) {
+		result.reserve(size);
+		
+		for(size_t idx = 0; idx < size; ++idx) {
 			result.push_back(heap.top());
 			heap.pop();
 		}
