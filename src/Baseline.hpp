@@ -14,13 +14,6 @@
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>*/
 
-class Compare {
-public:
-	bool operator()(const std::pair<uint32_t, uint32_t> &p1, const std::pair<uint32_t, uint32_t> &p2) {
-		return p1.second > p2.second;
-	}
-};
-
 class Baseline {
 private:
 	std::map<std::string, std::vector<uint32_t>> m_time_series;
@@ -113,13 +106,12 @@ public:
 		const auto lt_end = lt_idx - m_dates.begin();
 		const auto rt_end = rt_idx - m_dates.begin();
 		
+		auto compare = [](const std::pair<uint32_t, uint32_t> &p1, 
+					      const std::pair<uint32_t, uint32_t> &p2) -> bool { return p1.second > p2.second; };
+		
 		std::priority_queue<std::pair<uint32_t, uint32_t>,
 							std::vector<std::pair<uint32_t, uint32_t>>,
-							/*[](const std::pair<uint32_t, uint32_t> &p1, 
-							   const std::pair<uint32_t, uint32_t> &p2) -> bool {
-								return p1.second > p2.second;
-							}> heap;*/
-							Compare> heap;
+							decltype(compare)> heap(compare);
 		
 		for(size_t idx = lt_end; idx <= rt_end; ++idx) {
 			if(heap.size() < k)
@@ -131,9 +123,7 @@ public:
 		}
 		
 		std::vector<std::pair<uint32_t, uint32_t>> result;
-		
-		uint32_t size = heap.size();
-		
+		size_t size = heap.size();
 		result.reserve(size);
 		
 		for(size_t idx = 0; idx < size; ++idx) {
