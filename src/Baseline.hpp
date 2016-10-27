@@ -108,12 +108,13 @@ public:
 		
 		std::priority_queue<std::pair<uint32_t, uint32_t>,
 							std::vector<std::pair<uint32_t, uint32_t>>,
-							[](const std::pair<uint32_t, uint32_t> &p1, const std::pair<uint32_t, uint32_t> &p2) {
+							[](const std::pair<uint32_t, uint32_t> &p1, 
+							   const std::pair<uint32_t, uint32_t> &p2) -> bool {
 								return p1.second > p2.second;
 							}> heap;
 		
 		for(size_t idx = lt_end; idx <= rt_end; ++idx) {
-			if(heap.size() < k)
+			if(heap.size() < k+1)
 				heap.emplace(m_dates[idx], pg[idx]);
 			else if(heap.top().second < pg[idx]) {
 				heap.emplace(m_dates[idx], pg[idx]);
@@ -122,6 +123,7 @@ public:
 		}
 		
 		std::vector<std::pair<uint32_t, uint32_t>> result;
+		
 		result.reserve(heap.size());
 		
 		for(size_t idx = 0; idx < heap.size(); ++idx) {
