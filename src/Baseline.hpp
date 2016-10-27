@@ -14,13 +14,6 @@
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>*/
 
-class Compare {
-public:
-	bool operator()(std::pair<uint32_t, uint32_t> p1, std::pair<uint32_t, uint32_t> p2) {
-		return p1.second > p2.second;
-	}
-};
-
 class Baseline {
 private:
 	std::map<std::string, std::vector<uint32_t>> m_time_series;
@@ -115,7 +108,9 @@ public:
 		
 		std::priority_queue<std::pair<uint32_t, uint32_t>,
 							std::vector<std::pair<uint32_t, uint32_t>>,
-							Compare> heap;
+							[](const std::pair<uint32_t, uint32_t> &p1, const std::pair<uint32_t, uint32_t> &p2) {
+								return p1.second > p2.second;
+							}> heap;
 		
 		for(size_t idx = lt_end; idx <= rt_end; ++idx) {
 			if(heap.size() < k)
