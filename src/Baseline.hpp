@@ -14,10 +14,11 @@
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
 
-
 class Baseline {
 private:
+	//Main data structure for time series
 	std::map<std::string, std::vector<uint32_t>> m_time_series;
+	//List of dates
 	std::vector<uint32_t> m_dates;
 
 	template <class Archive>
@@ -29,6 +30,10 @@ public:
 	Baseline() {}
 	~Baseline() {}
 
+	/* Reads time series from file and populate data structure
+	* *
+	* dataset_name: dataset file name
+	*/
 	Baseline(const std::string &dataset_name) {
 		std::set<std::string> lines;
 		std::ifstream infile(dataset_name);
@@ -65,18 +70,33 @@ public:
 		}
 	}
 
+	/* Serialize data structure on binary file
+	 * *
+	 * file_name: binary file name
+	 */
 	void serialize_data(const std::string &file_name) const {
 		std::ofstream os(file_name, std::ios::binary);
 		cereal::BinaryOutputArchive output(os);
 		output(m_time_series,m_dates);
 	}
 
+	/* Load data structure from a binary file
+	 * *
+	 * file_name: name of binary file
+	 */
 	void load_data(const std::string &file_name) {
 		std::ifstream is(file_name, std::ios::binary);
 		cereal::BinaryInputArchive input(is);
 		input(m_time_series,m_dates);
 	}
 
+	/* Return a vector with all the counters of page
+	 * in the time interval [time1, time2] in tuple version
+	 * *
+	 * page: string of the selected webpage
+	 * time1: start of the selected range
+	 * time2: finish of the selected range
+	 */
 	inline std::vector<uint32_t> range(
 		const std::string &page, uint32_t time1, uint32_t time2) const {
 
@@ -96,6 +116,14 @@ public:
 		return result;
 	}
 
+	/* Return a heap structure with all the top K counters of page
+	* in the time interval [time1, time2] in tuple version
+	* *
+	* page: string of the selected webpage
+	* time1: start of the selected range
+	* time2: finish of the selected range
+	* k: number of counters required
+	*/
 	inline std::vector<std::pair<uint32_t, uint32_t>> rangeTopK(
 		const std::string &page, uint32_t time1, uint32_t time2, uint32_t k) const {
 
@@ -134,6 +162,7 @@ public:
 		return result;
 	}
 
+	/* Returns the memory size occupied by data structure*/
 	size_t size() const {
 		std::vector<std::pair<std::string, std::vector<uint32_t>>> values;
 
@@ -145,6 +174,7 @@ public:
 		return result;
 	}
 
+	/* Print data structure content for debug*/
 	void print(void) const {
 		for(auto const &elem : m_time_series) {
 			std::cout << elem.first << std::endl;
