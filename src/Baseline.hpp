@@ -35,18 +35,19 @@ public:
 	* dataset_name: dataset file name
 	*/
 	Baseline(const std::string &dataset_name) {
-		std::set<std::string> lines;
+		std::vector<std::string> lines;
 		std::ifstream infile(dataset_name);
 		std::string token;
 
 		for(std::string line; getline(infile, line); ) {
-			lines.insert(line);
+			lines.push_back(line);
 			token = line.substr(0, line.find("\t"));
 			uint32_t date = atoi((token.substr(0, line.find("-")) + token.substr(line.find("-")+1, token.length()-1)).c_str());
 			if(std::find(m_dates.begin(), m_dates.end(), date) == m_dates.end())
 				m_dates.push_back(date);
 		}
 		infile.close();
+		std::sort(m_dates.begin(), m_dates.end());
 
 		for(auto line: lines){
 			uint32_t date, count;
@@ -66,8 +67,22 @@ public:
 				m_time_series.insert(make_pair(page,visits));
 			}
 			size_t date_idx = std::find(m_dates.begin(),m_dates.end(),date) - m_dates.begin();
+			std::cout << page << " " << date << " idx=" << date_idx << std::endl;
 			(m_time_series[page])[date_idx] = count;
 		}
+	}
+
+	/* Return all pages */
+	std::vector<std::string> get_pages() const{
+		std::vector<std::string> pages;
+		for(auto page: m_time_series)
+			pages.push_back(page.first);
+		return pages;
+	}
+
+	/* Return all dates */
+	std::vector<uint32_t> get_dates() const{
+		return m_dates;
 	}
 
 	/* Serialize data structure on binary file
@@ -178,9 +193,9 @@ public:
 	void print(void) const {
 		for(auto const &elem : m_time_series) {
 			std::cout << elem.first << std::endl;
-			for(auto const visit : elem.second) {
-				size_t date_idx = std::find((elem.second).begin(),(elem.second).end(),visit) - (elem.second).begin();
-				std::cout << "\t" << m_dates[date_idx] << " " << visit << std::endl;
+			std::vector<uint32_t> visits = elem.second;
+			for(size_t i=0; i<m_dates.size(); ++i){
+				std::cout << "\t" << m_dates[i] << " " << visits[i] << std::endl;
 			}
 		}
 	}
