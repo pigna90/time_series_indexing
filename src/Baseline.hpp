@@ -67,7 +67,6 @@ public:
 				m_time_series.insert(make_pair(page,visits));
 			}
 			size_t date_idx = std::find(m_dates.begin(),m_dates.end(),date) - m_dates.begin();
-			std::cout << page << " " << date << " idx=" << date_idx << std::endl;
 			(m_time_series[page])[date_idx] = count;
 		}
 	}

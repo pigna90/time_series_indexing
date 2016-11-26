@@ -8,7 +8,7 @@ set(SOURCES src/Baseline.hpp src/build_index.cpp)
 add_executable(build_index ${SOURCES})
 target_compile_features(build_index PRIVATE cxx_range_for)
 
-set(SOURCES src/build_query_sets.cpp)
+set(SOURCES src/QuerySets.hpp src/build_query_sets.cpp)
 add_executable(build_query_sets ${SOURCES})
 target_compile_features(build_query_sets PRIVATE cxx_range_for)
 
