@@ -11,24 +11,31 @@ This is a project made for educational purpose for the course of [Laboratory on 
 ### Usage
 Generate a makefile and build project:
 ```sh
-$ cmake CMakeLists.txt
+$ mkdir _build
+$ cd _build
+$ cmake ..
 $ make
 ```
-The executables will be placed in `bin/`.  
+The executables will be placed in `_build/bin/`.  
 
 Data serialization:
 ```sh
-$ test_serialize path/to/dataset output.bin
+$ cd _build/bin/
+$ build_index id path/to/dataset
 ```
-Data querying:
+The object will be saved in the same folder of dataset file, with the same name plus the index id.  
+
+Build query sets:
 ```sh
-$ test_querying path/to/output.bin
+$ build_query_sets path/to/dataset num_of_query
 ```
-Random queries maker:
+This one will build three different set of queries each with different size of Range and K.  
+If there is a serialized data structure with id=0, the creation will be faster because doesn't needs to populate structure from file.  
+
+Run queries:
 ```sh
-$ queries_maker numberOfQueries K_min K_max path/to/dataset out_queries
+$ run_queries id path/to/dataset path/to/query_set
 ```
-Where **K_min** and **K_max** reppresent the range of K values, and **out_queries** the result file.
 
 ### Authors
 Alessandro Romano  
