@@ -24,11 +24,6 @@ std::vector<query> range_queries (
     return queries;
 }
 
-std::vector<query> topk_queries(
-    uint32_t n, uint32_t date_range, uint16_t k_percent){
-
-}
-
 int main(int argc, char const *argv[]) {
     if(argc == 3){
         std::string ds_filename = argv[1];
