@@ -37,7 +37,7 @@ Run queries:
 $ run_queries id path/to/dataset path/to/query_set
 ```
 
-### Authors
+### Author
 Alessandro Romano  
 
 [Laboratory on Algorithms for Big Data]: <http://pages.di.unipi.it/rossano/221-2/laboratory-on-algorithms-for-big-data-a-a-201617/>
