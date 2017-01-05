@@ -43,11 +43,14 @@ public:
 			lines.push_back(line);
 			token = line.substr(0, line.find("\t"));
 			uint32_t date = atoi((token.substr(0, line.find("-")) + token.substr(line.find("-")+1, token.length()-1)).c_str());
-			if(std::find(m_dates.begin(), m_dates.end(), date) == m_dates.end())
-				m_dates.push_back(date);
+			m_dates.push_back(date);
 		}
 		infile.close();
+
+		//Sorting and erasing duplicates from dates vector
 		std::sort(m_dates.begin(), m_dates.end());
+		m_dates.erase( unique( m_dates.begin(), m_dates.end() ), m_dates.end());
+
 
 		for(auto line: lines){
 			uint32_t date, count;
