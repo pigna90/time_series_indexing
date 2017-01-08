@@ -33,15 +33,16 @@ int main(int argc, char const *argv[]) {
         std::vector<std::string> pages = b.get_pages();
         std::vector<uint32_t> dates = b.get_dates();
         std::sort(dates.begin(), dates.end());
+        auto k = 3;
         for(double p=0.10; p<=0.80; p=p+0.30){
             uint32_t range = p*dates.size();
-            uint32_t k = p*range;
             std::vector<query> queries = range_queries(num_of_query, range, pages, dates);
             std::ofstream outfile;
             outfile.open(ds_filename + ".range.queries." + std::to_string((int)(p*100)),std::ios::out);
             for(auto e: queries){
                 outfile << e.page << "\t" << e.date_begin << "\t" << e.date_end << "\t" << k << "\n";
             }
+            k += 3;
         }
     }
     else
