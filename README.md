@@ -37,10 +37,9 @@ Run queries:
 $ run_queries id path/to/dataset path/to/query_set
 ```
 
-### Authors
+### Author
 Alessandro Romano  
-Paolo Grossi
 
-[Laboratory on Algorithms for Big Data]:<http://pages.di.unipi.it/rossano/221-2/laboratory-on-algorithms-for-big-data-a-a-201617/>
+[Laboratory on Algorithms for Big Data]: <http://pages.di.unipi.it/rossano/221-2/laboratory-on-algorithms-for-big-data-a-a-201617/>
 [Cereal]: <http://uscilab.github.io/cereal/index.html>
 [CMake]: <https://cmake.org/>
