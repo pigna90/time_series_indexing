@@ -32,6 +32,26 @@ std::vector<query> load_queries(const std::string qs_filename){
     return queries;
 }
 
+void range_fun(Baseline const b, std::vector<query> const queries){
+	auto begin_range = std::chrono::high_resolution_clock::now();
+	for(query q: queries)
+		b.range(q.page, q.date_begin, q.date_end);
+	auto end_range = std::chrono::high_resolution_clock::now();
+	std::cout << "Range execution time: ";
+	std::cout <<std::chrono::duration_cast<std::chrono::nanoseconds>(end_range-begin_range).count() << " ns";
+	std::cout << " ("<<std::chrono::duration_cast<std::chrono::seconds>(end_range-begin_range).count() << " s)" << std::endl;
+}
+
+void topK_fun(Baseline const b, std::vector<query> const queries){
+	auto begin_topk = std::chrono::high_resolution_clock::now();
+	for(query q: queries)
+		b.rangeTopK(q.page, q.date_begin, q.date_end, q.k);
+	auto end_topk = std::chrono::high_resolution_clock::now();
+	std::cout << "Range topK execution time: ";
+	std::cout <<std::chrono::duration_cast<std::chrono::nanoseconds>(end_topk-begin_topk).count() << " ns";
+	std::cout << " ("<<std::chrono::duration_cast<std::chrono::seconds>(end_topk-begin_topk).count() << " s)" << std::endl;
+}
+
 int main(int argc, char const *argv[]) {
     if(argc == 4){
         char const *id = argv[1];
@@ -43,21 +63,8 @@ int main(int argc, char const *argv[]) {
                 b.load_data(ds_filename + "." + id);
                 std::vector<query> queries = load_queries(qs_filename);
 
-                auto begin_range = std::chrono::high_resolution_clock::now();
-                for(query q: queries)
-                    b.range(q.page, q.date_begin, q.date_end);
-                auto end_range = std::chrono::high_resolution_clock::now();
-                std::cout << "Range execution time: ";
-                std::cout <<std::chrono::duration_cast<std::chrono::nanoseconds>(end_range-begin_range).count() << " ns";
-                std::cout << " ("<<std::chrono::duration_cast<std::chrono::seconds>(end_range-begin_range).count() << " s)" << std::endl;
-
-                auto begin_topk = std::chrono::high_resolution_clock::now();
-                for(query q: queries)
-                    b.rangeTopK(q.page, q.date_begin, q.date_end, q.k);
-                auto end_topk = std::chrono::high_resolution_clock::now();
-                std::cout << "Range topK execution time: ";
-                std::cout <<std::chrono::duration_cast<std::chrono::nanoseconds>(end_topk-begin_topk).count() << " ns";
-                std::cout << " ("<<std::chrono::duration_cast<std::chrono::seconds>(end_topk-begin_topk).count() << " s)" << std::endl;
+                range_fun(b, queries);
+				topK_fun(b, queries);
             break;
         }
 	}
