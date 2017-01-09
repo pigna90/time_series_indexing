@@ -38,7 +38,7 @@ int main(int argc, char const *argv[]) {
             uint32_t range = p*dates.size();
             std::vector<query> queries = range_queries(num_of_query, range, pages, dates);
             std::ofstream outfile;
-            outfile.open(ds_filename + ".range.queries." + std::to_string((int)(p*100)),std::ios::out);
+            outfile.open(ds_filename + ".queries." + std::to_string((int)(p*100)),std::ios::out);
             for(auto e: queries){
                 outfile << e.page << "\t" << e.date_begin << "\t" << e.date_end << "\t" << k << "\n";
             }

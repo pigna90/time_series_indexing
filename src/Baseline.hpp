@@ -9,6 +9,8 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <cereal/types/unordered_map.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/string.hpp>
@@ -17,7 +19,7 @@
 class Baseline {
 private:
 	//Main data structure for time series
-	std::map<std::string, std::vector<uint32_t>> m_time_series;
+	std::unordered_map<std::string, std::vector<uint32_t>> m_time_series;
 	//Map of dates for lookup
 	std::map<uint32_t,size_t> m_map_dates;
 	//Vector of dates
