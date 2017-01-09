@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.6.2 FATAL_ERROR)
 project(time_series_indexing)
 file(MAKE_DIRECTORY "bin/")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin/")
+set(CMAKE_BUILD_TYPE Release)
 
 # Serialization test main
 set(SOURCES src/Baseline.hpp src/build_index.cpp)
