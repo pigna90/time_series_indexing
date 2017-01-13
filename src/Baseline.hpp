@@ -128,7 +128,7 @@ public:
 	inline std::vector<uint32_t> range(
 		const std::string &page, uint32_t time1, uint32_t time2) const {
 
-		const auto pg = m_time_series.at(page);
+		const auto &pg = m_time_series.at(page);
 		const auto lt_end = m_map_dates.at(time1);
 		const auto rt_end = m_map_dates.at(time2);
 
@@ -152,7 +152,7 @@ public:
 	inline std::vector<std::pair<uint32_t, uint32_t>> rangeTopK(
 		const std::string &page, uint32_t time1, uint32_t time2, uint32_t k) const {
 
-		const auto pg = m_time_series.at(page);
+		const auto &pg = m_time_series.at(page);
 		const auto lt_end = m_map_dates.at(time1);
 		const auto rt_end = m_map_dates.at(time2);
 
