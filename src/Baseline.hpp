@@ -141,7 +141,7 @@ public:
 		return result;
 	}
 
-	/* Return a heap structure with all the top K counters of page
+	/* Return a vector with all the top K counters of page
 	* in the time interval [time1, time2] in tuple version
 	* *
 	* page: string of the selected webpage
@@ -186,13 +186,18 @@ public:
 
 	/* Returns the memory size occupied by data structure*/
 	size_t size() const {
-		std::vector<std::pair<std::string, std::vector<uint32_t>>> values;
+		std::vector<std::pair<std::string, std::vector<uint32_t>>> values_1;
+		std::vector<std::pair<uint32_t, size_t>> values_2;
 
-		for(auto idx = m_time_series.begin(); idx != m_time_series.end(); ++idx) {
-			values.emplace_back(idx->first, idx->second);
-		}
+		for(auto idx = m_time_series.begin(); idx != m_time_series.end(); ++idx)
+			values_1.emplace_back(idx->first, idx->second);
 
-		size_t result = sizeof(std::string) * sizeof(std::vector<uint32_t>) * values.size();
+		for(auto idx = m_map_dates.begin(); idx != m_map_dates.end(); ++idx)
+			values_2.emplace_back(idx->first, idx->second);
+
+		size_t result = sizeof(std::string) * sizeof(std::vector<uint32_t>) * values_1.size();
+		result += sizeof(uint32_t) * sizeof(size_t) * values_2.size();
+		result += sizeof(uint32_t) * m_dates.size();
 		return result;
 	}
 
