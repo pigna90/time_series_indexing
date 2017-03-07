@@ -1,10 +1,12 @@
 #pragma once
 
+#include "Baseline.hpp"
+#include "Index1.hpp"
+
 #include <iostream>
 #include <string.h>
 #include <chrono>
 #include <ctime>
-#include "Baseline.hpp"
 
 int main(int argc, char const *argv[]) {
     char const *id = argv[1];
