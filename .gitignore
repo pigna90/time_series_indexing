@@ -3,3 +3,4 @@ bin/*
 data/*
 _build/*
 src/BuildQuerySets.hpp
+main_prova.cpp
