@@ -1,10 +1,13 @@
 #pragma once
 
-#include <sdsl/sd_vector.hpp>
-#include <sdsl/rmq_support.hpp>
-#include <map>
 #include <unordered_map>
 #include <queue>
+#include <sdsl/sd_vector.hpp>
+#include <sdsl/rmq_support.hpp>
+#include <cereal/types/unordered_map.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>
 
 class Index1{
 private:
@@ -12,14 +15,20 @@ private:
 	sdsl::sd_vector<> m_visits_ef;
 	//Support structure for m_visits_ef
 	sdsl::select_support_sd<1> m_visits_supp;
-	//Pages start index
-	std::unordered_map<std::string, size_t> m_pages;
 	//Range maximum query on m_visits
 	sdsl::rmq_succinct_sct<0> m_rmq;
+	//Pages start index
+	std::unordered_map<std::string, size_t> m_pages;
 	//Map of dates for lookup
-	std::unordered_map<uint32_t, size_t> m_map_dates; //Succinct? //Unordered_map ?
+	std::unordered_map<uint32_t, size_t> m_map_dates; //Succinct?
 	//Vector of dates
 	std::vector<uint32_t> m_dates;
+
+	template <class Archive>
+	void serialize(Archive &archive) {
+		archive(m_pages, m_map_dates, m_dates);
+	}
+
 public:
 	Index1() {}
 	~Index1() {}
@@ -47,7 +56,7 @@ public:
 			m_dates.push_back(date);
 
 			if (m_pages.find(page) == m_pages.end()) {
-				m_pages.insert(make_pair(page, page_id));
+				m_pages.emplace(page, page_id);
 				page_id++;
 			}
 		}
@@ -57,14 +66,11 @@ public:
 		std::sort(m_dates.begin(), m_dates.end());
 		m_dates.erase( unique( m_dates.begin(), m_dates.end() ), m_dates.end());
 
-		for(auto e : m_dates)
-			std::cout << e << std::endl;
-
 		//HashTable for retrieve lookup index position instead
 		//of find it from vector
 		size_t date_id = 0;
 		for(auto d: m_dates){
-			m_map_dates.insert(std::make_pair(d, date_id));
+			m_map_dates.emplace(d, date_id);
 			date_id++;
 		}
 
@@ -101,6 +107,39 @@ public:
 
 		//Support structure for m_visits_ef
 		m_visits_supp = sdsl::select_support_sd<1> (&m_visits_ef);
+	}
+
+	/* Serialize data structure on binary file
+	 * *
+	 * file_name: binary file name
+	 */
+	void serialize_data(const std::string &file_name) const {
+		//Store STL data structures
+		std::ofstream os(file_name, std::ios::binary);
+		cereal::BinaryOutputArchive output(os);
+		output(m_pages, m_map_dates, m_dates);
+
+		//Store SDSL data structures
+		sdsl::store_to_file(m_visits_ef, file_name + ".sdsl.m_visits_ef");
+		sdsl::store_to_file(m_visits_supp, file_name + ".sdsl.m_visits_supp");
+		sdsl::store_to_file(m_rmq, file_name + ".sdsl.m_rmq");
+	}
+
+	/* Load data structure from a binary file
+	 * *
+	 * file_name: name of binary file
+	 */
+	void load_data(const std::string &file_name) {
+		//Load STL data structures
+		std::ifstream is(file_name, std::ios::binary);
+		cereal::BinaryInputArchive input(is);
+		input(m_pages, m_map_dates, m_dates);
+
+		//Load SDSL data structures
+		sdsl::load_from_file(m_visits_ef, file_name + ".sdsl.m_visits_ef");
+		//Support structure for m_visits_ef
+		m_visits_supp = sdsl::select_support_sd<1> (&m_visits_ef);
+		sdsl::load_from_file(m_rmq, file_name + ".sdsl.m_rmq");
 	}
 
 	/* Return a vector with all the counters of page
@@ -140,36 +179,67 @@ public:
 	inline std::vector<std::pair<uint32_t, uint32_t>> rangeTopK(
 		const std::string &page, uint32_t time1, uint32_t time2, uint32_t k) const {
 
+		// Struct for topk with rmq
 		struct weight_interval{
 			uint64_t w;
 			size_t idx, lb, rb;
 			weight_interval(uint64_t f_w, size_t f_idx, size_t f_lb, size_t f_rb) :
 				w(f_w), idx(f_idx), lb(f_lb), rb(f_rb) {}
 
+			// Comparator for priority queue
 			bool operator<(const weight_interval& wi) const {
 				return std::tie(w, idx, lb, rb) < std::tie(wi.w, wi.idx, wi.lb, wi.rb);
 			}
 		};
 
-		const auto lt_end = (m_dates.size()*m_pages.at(page))+m_map_dates.at(time1)+1;
-		const auto rt_end = (m_dates.size()*m_pages.at(page))+m_map_dates.at(time2)+1;
+		const auto lt_end = (m_dates.size()*m_pages.at(page))+m_map_dates.at(time1);
+		const auto rt_end = (m_dates.size()*m_pages.at(page))+m_map_dates.at(time2);
 
 		std::priority_queue<weight_interval> pq;
-		auto push_interval = [&](size_t f_lb, size_t f_rb) {
+		auto push_interval = [&](int f_lb, int f_rb) {
 			if ( f_rb > f_lb ) {
-				size_t max_idx = rmq(f_lb, f_rb);
-				pq.push(weight_interval(w[max_idx], max_idx, f_lb, f_rb));
+				size_t max_idx = m_rmq(f_lb, f_rb);
+				uint64_t sum = max_idx+1 == 1 ? 0 : m_visits_supp(max_idx);
+				uint64_t w = m_visits_supp(max_idx+1) - sum;
+				pq.push(weight_interval(w, max_idx, f_lb, f_rb));
 			}
 		};
 
-		vector<size_t> res;
-		push_interval(r[0], r[1]);
-		while ( res.size() < k and !pq.empty() ) {
+		std::vector<std::pair<uint32_t, uint32_t>> result;
+		result.reserve(k);
+
+		push_interval(lt_end, rt_end);
+		while ( result.size() < k and !pq.empty() ) {
 			auto iv = pq.top(); pq.pop();
-			res.push_back(iv.idx);
-			push_interval(iv.lb, iv.idx-1);
-			push_interval(iv.idx+1, iv.rb);
+			uint32_t time = m_dates[iv.idx-(m_pages.at(page)*m_dates.size())];
+			result.emplace_back(time, iv.w);
+			if(iv.lb >= lt_end)
+				push_interval(iv.lb, iv.idx-1);
+			if(iv.rb <= rt_end)
+				push_interval(iv.idx+1, iv.rb);
 		}
-		//IV sono
+
+		return result;
+	}
+
+	/* Returns the memory size occupied by data structures*/
+	size_t size() const {
+		std::vector<std::pair<std::string, std::vector<uint32_t>>> values_1;
+		std::vector<std::pair<uint32_t, size_t>> values_2;
+
+		for(auto idx = m_pages.begin(); idx != m_pages.end(); ++idx)
+			values_1.emplace_back(idx->first, idx->second);
+
+		for(auto idx = m_map_dates.begin(); idx != m_map_dates.end(); ++idx)
+			values_2.emplace_back(idx->first, idx->second);
+
+		size_t result = sizeof(std::string) * sizeof(size_t) * values_1.size();
+		result += sizeof(uint32_t) * sizeof(size_t) * values_2.size();
+		result += sizeof(uint32_t) * m_dates.size();
+		result += sdsl::size_in_bytes(m_visits_ef);
+		result += sdsl::size_in_bytes(m_visits_supp);
+		result += sdsl::size_in_bytes(m_rmq);
+
+		return result;
 	}
 };
