@@ -5,7 +5,6 @@
 #include <chrono>
 #include <fstream>
 
-
 struct query{
     std::string page;
     uint32_t date_begin;
@@ -57,9 +56,11 @@ void topK_fun(T const b, std::vector<query> const queries){
 int main(int argc, char const *argv[]) {
     if(argc == 4){
         char const *id = argv[1];
-        std::string ds_filename = argv[2];
-        std::string qs_filename = argv[3];
+        std::string ds_filename = argv[2]; //Dataset filename
+        std::string qs_filename = argv[3]; //Query sets filename
+
         std::vector<query> queries = load_queries(qs_filename);
+
         switch (atoi(id)) {
             case 0:{
                 Baseline b;
@@ -69,10 +70,11 @@ int main(int argc, char const *argv[]) {
 				topK_fun<Baseline> (b, queries);
 			}break;
             case 1:{
-                Index1 b(ds_filename);
+                Index1 id1;
+                id1.load_data(ds_filename + "." + id);
 
-                range_fun<Index1> (b, queries);
-				topK_fun<Index1> (b, queries);
+                range_fun<Index1> (id1, queries);
+				topK_fun<Index1> (id1, queries);
 			}break;
         }
 	}
