@@ -60,7 +60,7 @@ public:
 		//of find it from vector
 		size_t value = 0;
 		for(auto d: m_dates){
-			m_map_dates.insert(std::make_pair(d,value));
+			m_map_dates.emplace(d,value);
 			value++;
 		}
 
@@ -79,7 +79,7 @@ public:
 
 			if (m_time_series.find(page) == m_time_series.end()) {
 				std::vector<uint32_t> visits(m_dates.size(),0);
-				m_time_series.insert(make_pair(page,visits));
+				m_time_series.emplace(page,visits);
 			}
 			(m_time_series[page])[m_map_dates[date]] = count;
 		}
