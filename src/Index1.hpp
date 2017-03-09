@@ -121,7 +121,6 @@ public:
 
 		//Store SDSL data structures
 		sdsl::store_to_file(m_visits_ef, file_name + ".sdsl.m_visits_ef");
-		sdsl::store_to_file(m_visits_supp, file_name + ".sdsl.m_visits_supp");
 		sdsl::store_to_file(m_rmq, file_name + ".sdsl.m_rmq");
 	}
 
@@ -137,9 +136,10 @@ public:
 
 		//Load SDSL data structures
 		sdsl::load_from_file(m_visits_ef, file_name + ".sdsl.m_visits_ef");
+		sdsl::load_from_file(m_rmq, file_name + ".sdsl.m_rmq");
+
 		//Support structure for m_visits_ef
 		m_visits_supp = sdsl::select_support_sd<1> (&m_visits_ef);
-		sdsl::load_from_file(m_rmq, file_name + ".sdsl.m_rmq");
 	}
 
 	/* Return a vector with all the counters of page
@@ -237,7 +237,6 @@ public:
 		result += sizeof(uint32_t) * sizeof(size_t) * values_2.size();
 		result += sizeof(uint32_t) * m_dates.size();
 		result += sdsl::size_in_bytes(m_visits_ef);
-		result += sdsl::size_in_bytes(m_visits_supp);
 		result += sdsl::size_in_bytes(m_rmq);
 
 		return result;
