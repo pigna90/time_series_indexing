@@ -19,7 +19,7 @@ void build_index(const std::string &id, const std::string &ds_filename){
 	std::cout <<std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count() << " ns";
 	std::cout << " ("<<std::chrono::duration_cast<std::chrono::seconds>(end-begin).count() << " s)" << std::endl;
 	std::cout << "Memory size: ";
-	std::cout << b.size() << " byte" << std::endl;
+	std::cout << b.size(ds_filename + "." + id) << " byte" << std::endl;
 }
 
 int main(int argc, char const *argv[]) {

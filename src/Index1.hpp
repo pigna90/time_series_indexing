@@ -222,23 +222,23 @@ public:
 		return result;
 	}
 
-	/* Returns the memory size occupied by data structures*/
-	size_t size() const {
-		std::vector<std::pair<std::string, std::vector<uint32_t>>> values_1;
-		std::vector<std::pair<uint32_t, size_t>> values_2;
+	/* Returns the memory size occupied by data structures serialized
+	 * *
+	 * file_name: serialized object file name
+	 * */
+	size_t size(const std::string &file_name) const {
+		std::ifstream infile_1(file_name);
+		std::ifstream infile_2(file_name + ".sdsl.m_visits_ef");
+		std::ifstream infile_3(file_name + ".sdsl.m_rmq");
 
-		for(auto idx = m_pages.begin(); idx != m_pages.end(); ++idx)
-			values_1.emplace_back(idx->first, idx->second);
+		if(infile_1.good() && infile_2.good() && infile_3.good()){
+			std::ifstream in_1(file_name, std::ifstream::ate | std::ifstream::binary);
+			std::ifstream in_2(file_name + ".sdsl.m_visits_ef", std::ifstream::ate | std::ifstream::binary);
+			std::ifstream in_3(file_name + ".sdsl.m_rmq", std::ifstream::ate | std::ifstream::binary);
 
-		for(auto idx = m_map_dates.begin(); idx != m_map_dates.end(); ++idx)
-			values_2.emplace_back(idx->first, idx->second);
-
-		size_t result = sizeof(std::string) * sizeof(size_t) * values_1.size();
-		result += sizeof(uint32_t) * sizeof(size_t) * values_2.size();
-		result += sizeof(uint32_t) * m_dates.size();
-		result += sdsl::size_in_bytes(m_visits_ef);
-		result += sdsl::size_in_bytes(m_rmq);
-
-		return result;
+			return in_1.tellg() + in_2.tellg() + in_3.tellg();
+		}
+		else
+			return 0; //No object serialized
 	}
 };

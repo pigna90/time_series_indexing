@@ -180,21 +180,18 @@ public:
 		return result;
 	}
 
-	/* Returns the memory size occupied by data structure*/
-	size_t size() const {
-		std::vector<std::pair<std::string, std::vector<uint32_t>>> values_1;
-		std::vector<std::pair<uint32_t, size_t>> values_2;
-
-		for(auto idx = m_time_series.begin(); idx != m_time_series.end(); ++idx)
-			values_1.emplace_back(idx->first, idx->second);
-
-		for(auto idx = m_map_dates.begin(); idx != m_map_dates.end(); ++idx)
-			values_2.emplace_back(idx->first, idx->second);
-
-		size_t result = sizeof(std::string) * sizeof(std::vector<uint32_t>) * values_1.size();
-		result += sizeof(uint32_t) * sizeof(size_t) * values_2.size();
-		result += sizeof(uint32_t) * m_dates.size();
-		return result;
+	/* Returns the memory size occupied by data structures serialized
+	 * *
+	 * file_name: serialized object file name
+	 * */
+	size_t size(const std::string &file_name) const {
+		std::ifstream infile(file_name);
+		if(infile.good()){
+			std::ifstream in(file_name, std::ifstream::ate | std::ifstream::binary);
+			return in.tellg();
+		}
+		else
+			return 0; //No object serialized
 	}
 
 	/* Print data structure content for debug*/
