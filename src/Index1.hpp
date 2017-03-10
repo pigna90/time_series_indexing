@@ -188,7 +188,8 @@ public:
 
 			// Comparator for priority queue
 			bool operator<(const weight_interval& wi) const {
-				return std::tie(w, idx, lb, rb) < std::tie(wi.w, wi.idx, wi.lb, wi.rb);
+				if(w == wi.w) return idx > wi.idx;
+				else return w < wi.w;
 			}
 		};
 
@@ -197,7 +198,7 @@ public:
 
 		std::priority_queue<weight_interval> pq;
 		auto push_interval = [&](int f_lb, int f_rb) {
-			if ( f_rb > f_lb ) {
+			if ( f_rb >= f_lb ) {
 				size_t max_idx = m_rmq(f_lb, f_rb);
 				uint64_t sum = max_idx+1 == 1 ? 0 : m_visits_supp(max_idx);
 				uint64_t w = m_visits_supp(max_idx+1) - sum;
@@ -213,9 +214,9 @@ public:
 			auto iv = pq.top(); pq.pop();
 			uint32_t time = m_dates[iv.idx-(m_pages.at(page)*m_dates.size())];
 			result.emplace_back(time, iv.w);
-			if(iv.lb >= lt_end)
+			//if(iv.lb >= lt_end)
 				push_interval(iv.lb, iv.idx-1);
-			if(iv.rb <= rt_end)
+			//if(iv.rb <= rt_end)
 				push_interval(iv.idx+1, iv.rb);
 		}
 

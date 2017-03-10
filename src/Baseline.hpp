@@ -153,7 +153,9 @@ public:
 		const auto rt_end = m_map_dates.at(time2);
 
 		auto compare = [](const std::pair<uint32_t, uint32_t> &p1,
-					      const std::pair<uint32_t, uint32_t> &p2) -> bool { return p1.second > p2.second; };
+					      const std::pair<uint32_t, uint32_t> &p2) -> bool {
+							  if(p1.second == p2.second) return p1.first < p2.first;
+							  else return p1.second > p2.second; };
 
 		std::priority_queue<std::pair<uint32_t, uint32_t>,
 							std::vector<std::pair<uint32_t, uint32_t>>,
@@ -168,12 +170,11 @@ public:
 			}
 		}
 
-		std::vector<std::pair<uint32_t, uint32_t>> result;
 		size_t size = heap.size();
-		result.reserve(size);
+		std::vector<std::pair<uint32_t, uint32_t>> result(size);
 
-		for(size_t idx = 0; idx < size; ++idx) {
-			result.push_back(heap.top());
+		for(int idx = size-1; idx >= 0; --idx) {
+			result[idx] = heap.top();
 			heap.pop();
 		}
 
