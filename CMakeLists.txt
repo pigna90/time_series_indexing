@@ -12,25 +12,31 @@ set(GCC_GTEST_FLAGS "-lgtest")
 add_definitions(${GCC_GTEST_FLAGS})
 
 # Build index
-SET(exec_1 build_index)
-ADD_EXECUTABLE(${exec_1} src/Baseline.hpp src/Index1.hpp src/build_index.cpp)
-TARGET_LINK_LIBRARIES(${exec_1} sdsl divsufsort divsufsort64)
-SET_PROPERTY(TARGET ${exec_1} PROPERTY COMPILE_DEFINITIONS)
+SET(exec build_index)
+ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp src/build_index.cpp)
+TARGET_LINK_LIBRARIES(${exec} sdsl divsufsort divsufsort64)
+SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
 
 # Run queries
-SET(exec_2 run_queries)
-ADD_EXECUTABLE(${exec_2} src/Baseline.hpp src/Index1.hpp src/run_queries.cpp)
-TARGET_LINK_LIBRARIES(${exec_2} sdsl divsufsort divsufsort64)
-SET_PROPERTY(TARGET ${exec_2} PROPERTY COMPILE_DEFINITIONS)
+SET(exec run_queries)
+ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp src/run_queries.cpp)
+TARGET_LINK_LIBRARIES(${exec} sdsl divsufsort divsufsort64)
+SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
 
 # Build query sets
-SET(exec_3 build_query_sets)
-ADD_EXECUTABLE(${exec_3} src/Baseline.hpp src/Index1.hpp src/build_query_sets.cpp)
-TARGET_LINK_LIBRARIES(${exec_3} sdsl divsufsort divsufsort64)
-SET_PROPERTY(TARGET ${exec_3} PROPERTY COMPILE_DEFINITIONS)
+SET(exec build_query_sets)
+ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp src/build_query_sets.cpp)
+TARGET_LINK_LIBRARIES(${exec} sdsl divsufsort divsufsort64)
+SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
 
-# Uint test
-SET(exec_4 test_baseline)
-ADD_EXECUTABLE(${exec_4} src/Baseline.hpp src/Index1.hpp src/test_common.hpp src/test_baseline.cpp)
-TARGET_LINK_LIBRARIES(${exec_4} gtest sdsl divsufsort divsufsort64)
-SET_PROPERTY(TARGET ${exec_4} PROPERTY COMPILE_DEFINITIONS)
+# Uint test for baseline
+SET(exec test_baseline)
+ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp src/test_common.hpp src/test_baseline.cpp)
+TARGET_LINK_LIBRARIES(${exec} gtest sdsl divsufsort divsufsort64)
+SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
+
+# Unit test for Index1
+SET(exec test_index1)
+ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp src/test_common.hpp src/test_index1.cpp)
+TARGET_LINK_LIBRARIES(${exec} gtest sdsl divsufsort divsufsort64)
+SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)

@@ -32,7 +32,7 @@ std::vector<query> load_queries(const std::string qs_filename){
 }
 
 template <typename T>
-void range_fun(T const b, std::vector<query> const queries){
+void range_fun(T b, std::vector<query> const queries){
 	auto begin_range = std::chrono::high_resolution_clock::now();
 	for(query q: queries)
 		b.range(q.page, q.date_begin, q.date_end);

@@ -52,8 +52,7 @@ public:
 		std::sort(m_dates.begin(), m_dates.end());
 		m_dates.erase( unique( m_dates.begin(), m_dates.end() ), m_dates.end());
 
-		//HashTable for retrieve lookup index position instead
-		//of find it from vector
+		//Inverse hash table for dates. Retrives the index of a given date
 		size_t value = 0;
 		for(auto d: m_dates){
 			m_map_dates.emplace(d,value);
