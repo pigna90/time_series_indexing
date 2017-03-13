@@ -161,8 +161,9 @@ public:
 		uint64_t sum = lt_end==1 ? 0 : m_visits_supp(lt_end-1);
 
 		for(size_t idx=lt_end; idx<=rt_end; ++idx){
-			result.push_back(m_visits_supp(idx) - sum);
-			sum = m_visits_supp(idx);
+			uint64_t val = m_visits_supp(idx);
+			result.push_back(val - sum);
+			sum = val;
 		}
 
 		return result;
