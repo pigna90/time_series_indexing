@@ -37,7 +37,7 @@ void range_fun(T b, std::vector<query> const queries){
 	for(query q: queries)
 		b.range(q.page, q.date_begin, q.date_end);
 	auto end_range = std::chrono::high_resolution_clock::now();
-	std::cout << "Range execution time: ";
+	std::cout << "Range execution time:\t\t";
 	std::cout <<std::chrono::duration_cast<std::chrono::nanoseconds>(end_range-begin_range).count() << " ns";
 	std::cout << " ("<<std::chrono::duration_cast<std::chrono::seconds>(end_range-begin_range).count() << " s)" << std::endl;
 }
@@ -48,7 +48,7 @@ void topK_fun(T const b, std::vector<query> const queries){
 	for(query q: queries)
 		b.rangeTopK(q.page, q.date_begin, q.date_end, q.k);
 	auto end_topk = std::chrono::high_resolution_clock::now();
-	std::cout << "Range topK execution time: ";
+	std::cout << "Range topK execution time:\t";
 	std::cout <<std::chrono::duration_cast<std::chrono::nanoseconds>(end_topk-begin_topk).count() << " ns";
 	std::cout << " ("<<std::chrono::duration_cast<std::chrono::seconds>(end_topk-begin_topk).count() << " s)" << std::endl;
 }
