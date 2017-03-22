@@ -4,6 +4,10 @@
 #include <iostream>
 #include <gtest/gtest.h>
 
+#define DS_FN "../test_cases/dataset_1.txt"
+#define RANGE_FN "../test_cases/range_cases_1.txt"
+#define TOPK_FN "../test_cases/topk_cases_1.txt"
+
 Baseline b;
 
 std::vector<range_case> range_cases;
@@ -37,21 +41,16 @@ TEST(Baseline, TopK){
 }
 
 int main(int argc, char** argv) {
-	if(argc == 4){
-		testing::InitGoogleTest(&argc, argv);
+	testing::InitGoogleTest(&argc, argv);
 
-        std::string ds_filename = argv[1];		//Dataset filename
-        std::string range_filename = argv[2];	//Range queries and results filename
-        std::string topk_filename = argv[3];	//Topk queries and results filename
+    std::string ds_filename = DS_FN;		//Dataset filename
+	std::string range_filename = RANGE_FN;	//Range queries and results filename
+	std::string topk_filename = TOPK_FN;	//Topk queries and results filename
 
-		range_cases = load_range_cases(range_filename);
-        topk_cases = load_topk_cases(topk_filename);
+	range_cases = load_range_cases(range_filename);
+	topk_cases = load_topk_cases(topk_filename);
 
-		b = Baseline(ds_filename);
+	b = Baseline(ds_filename);
 
-        return RUN_ALL_TESTS();
-	}
-	else
-		std::cout << "Missing parameters" << std::endl << "Exit." << std::endl;
-    return 0;
+	return RUN_ALL_TESTS();
 }
