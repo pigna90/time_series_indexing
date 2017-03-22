@@ -33,12 +33,12 @@ SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
 
 # Uint test for baseline
 SET(exec test_baseline)
-ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp test_cases/test_common.hpp test_cases/test_baseline.cpp)
+ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp test/test_common.hpp test/test_baseline.cpp)
 TARGET_LINK_LIBRARIES(${exec} gtest sdsl divsufsort divsufsort64)
 SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
 
 # Unit test for Index1
 SET(exec test_index1)
-ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp test_cases/test_common.hpp test_cases/test_index1.cpp)
+ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp test/test_common.hpp test/test_index1.cpp)
 TARGET_LINK_LIBRARIES(${exec} gtest sdsl divsufsort divsufsort64)
 SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
