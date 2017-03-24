@@ -13,32 +13,35 @@ add_definitions(${GCC_SDSL_FLAGS})
 set(GCC_GTEST_FLAGS "-lgtest")
 add_definitions(${GCC_GTEST_FLAGS})
 
+# Set of indexes
+set(indexes src/Baseline.hpp src/Index1.hpp)
+
 # Build index
 SET(exec build_index)
-ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp src/build_index.cpp)
+ADD_EXECUTABLE(${exec} ${indexes} src/build_index.cpp)
 TARGET_LINK_LIBRARIES(${exec} sdsl divsufsort divsufsort64)
 SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
 
 # Run queries
 SET(exec run_queries)
-ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp src/run_queries.cpp)
+ADD_EXECUTABLE(${exec} ${indexes} src/run_queries.cpp)
 TARGET_LINK_LIBRARIES(${exec} sdsl divsufsort divsufsort64)
 SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
 
 # Build query sets
 SET(exec build_query_sets)
-ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp src/build_query_sets.cpp)
+ADD_EXECUTABLE(${exec} ${indexes} src/build_query_sets.cpp)
 TARGET_LINK_LIBRARIES(${exec} sdsl divsufsort divsufsort64)
 SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
 
 # Uint test for baseline
 SET(exec test_baseline)
-ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp test/test_common.hpp test/test_baseline.cpp)
+ADD_EXECUTABLE(${exec} ${indexes} test/test_common.hpp test/test_baseline.cpp)
 TARGET_LINK_LIBRARIES(${exec} gtest sdsl divsufsort divsufsort64)
 SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
 
 # Unit test for Index1
 SET(exec test_index1)
-ADD_EXECUTABLE(${exec} src/Baseline.hpp src/Index1.hpp test/test_common.hpp test/test_index1.cpp)
+ADD_EXECUTABLE(${exec} ${indexes} test/test_common.hpp test/test_index1.cpp)
 TARGET_LINK_LIBRARIES(${exec} gtest sdsl divsufsort divsufsort64)
 SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS)
