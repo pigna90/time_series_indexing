@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn
+import os
 
 ##
 # Read queries times results from file and returns a map for each indexes.
@@ -40,7 +41,7 @@ def read_results(times_fname):
 ##
 # Plot of range times
 ##
-def plot_range(res):
+def plot_range(res, out_dir=None):
 	for key in res:
 		index = res[key]
 		x = []
@@ -54,12 +55,17 @@ def plot_range(res):
 	plt.xlabel("% date range")
 	plt.ylabel("Time (ns)")
 	plt.legend(res.keys(), loc='upper left')
-	plt.show()
+	if out_dir:
+		fname = os.path.join(out_dir, 'range_result.png')
+		plt.savefig(fname, bbox_inches='tight')
+	else:
+		plt.show()
+	plt.close()
 
 ##
 # Plot of topK times
 ##
-def plot_topk(res):
+def plot_topk(res, out_dir=None):
 	percs = list(next(iter (res.values())).keys())
 
 	for perc in percs:
@@ -76,13 +82,24 @@ def plot_topk(res):
 		plt.xlabel("K")
 		plt.ylabel("Time (ns)")
 		plt.legend(res.keys(), loc='upper left')
-		plt.show()
+		if out_dir:
+			fname = os.path.join(out_dir, 'topK_' + str(perc) + '_results.png')
+			plt.savefig(fname, bbox_inches='tight')
+		else:
+			plt.show()
+		plt.close()
 
 def main(args):
 	res = read_results(args[1])
+	out_dir = None
+	if len(args) <= 2:
+		print("Reading data from ", args[1], "...")
+	if len(args) == 3:
+		out_dir = args[2]
+		print("Saving charts in ", out_dir, "...")
 
-	plot_range(res)
-	plot_topk(res)
+	plot_range(res, out_dir)
+	plot_topk(res, out_dir)
 
 	return 0
 

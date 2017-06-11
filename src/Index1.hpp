@@ -20,7 +20,7 @@ private:
 	//Pages start index
 	std::unordered_map<std::string, size_t> m_pages;
 	//Map of dates for lookup
-	std::unordered_map<uint32_t, size_t> m_map_dates; //Succinct?
+	std::unordered_map<uint32_t, size_t> m_map_dates;
 	//Vector of dates
 	std::vector<uint32_t> m_dates;
 
@@ -215,10 +215,8 @@ public:
 			auto iv = pq.top(); pq.pop();
 			uint32_t time = m_dates[iv.idx-(m_pages.at(page)*m_dates.size())];
 			result.emplace_back(time, iv.w);
-			//if(iv.lb >= lt_end)
-				push_interval(iv.lb, iv.idx-1);
-			//if(iv.rb <= rt_end)
-				push_interval(iv.idx+1, iv.rb);
+			push_interval(iv.lb, iv.idx-1);
+			push_interval(iv.idx+1, iv.rb);
 		}
 
 		return result;
