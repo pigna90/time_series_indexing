@@ -16,5 +16,9 @@ Plot executions times:
 ```sh
 $ python3 indexes_analysis.py /path/to/results_file
 ```
+Plot executions times and save charts on file:
+```sh
+$ python3 indexes_analysis.py /path/to/results_file /path/to/output_dir
+```
 [Matplotlib]: <http://matplotlib.org/>
 [Seaborn]: <https://seaborn.pydata.org/>
