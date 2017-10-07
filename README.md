@@ -20,7 +20,7 @@ $ make
 The executables will be placed in `_build/bin/`.  
 
 ### Indices
-There are different implementations, each of it is represented by an index:
+There are two different implementations, each of it is represented by an index:
 * **0** : **Baseline** implementation
 * **1** : Implementation with **succinct data structures**  
 
