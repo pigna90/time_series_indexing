@@ -51,8 +51,6 @@ Test index=1 implementation:
 ```sh
 $ ./test_index1
 ```  
-## Author
-Alessandro Romano
 
 [Laboratory on Algorithms for Big Data]: <http://pages.di.unipi.it/rossano/221-2/laboratory-on-algorithms-for-big-data-a-a-201617/>
 [Cereal]: <http://uscilab.github.io/cereal/index.html>
